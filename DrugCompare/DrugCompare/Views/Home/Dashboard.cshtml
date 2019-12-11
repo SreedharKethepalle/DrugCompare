@@ -1,0 +1,35 @@
+﻿@model DrugCompare.Models.DashboardViewModel
+@{
+    ViewBag.Title = "DrugCompare";
+}
+
+
+
+<table border="1">
+    <tr>
+        <td colspan="2" align="center">
+            <h2>Dashboard</h2>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Partial("Partial_Plans", Model)
+        </td>
+        <td>
+            @Html.Partial("Partial_Prescription", Model)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.Partial("Partial_Provider", Model)
+        </td>
+        <td>
+            @Html.Partial("Partial_Pharmacy", Model)
+        </td>
+    </tr>
+</table>
+
+
+
+

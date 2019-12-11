@@ -1,0 +1,43 @@
+﻿@model DrugCompare.Models.DashboardViewModel
+
+
+<h3>Provider Details</h3>
+
+
+<article>
+    <div>
+        <table border="1">
+            <tr>
+                <td align="center">Provider Name</td>
+                <td align="center">Provider Address</td>
+                <td align="center">Provider Phone</td>
+                <td align="center">Provider Experience</td>
+                <td align="center"></td>
+            </tr>
+
+            @foreach (var item in Model.SelectedProviderVM)
+            {
+                <tr>
+                    <td>
+                        @Html.Hidden("ProviderId", @item.ProviderId)
+                        <span>@item.ProviderName</span>
+                    </td>
+                    <td>
+                        <span>@item.ProviderAddress</span>
+                    </td>
+                    <td>
+                        <span>@item.ProviderPhone</span>
+                    </td>
+                    <td>
+                        <span>@item.ProviderExperience</span>
+                    </td>
+                    <td>
+                        <input type="button" value="Change Plan" class="btn btn-primary" id="btn_selectPlan" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</article>
+
+

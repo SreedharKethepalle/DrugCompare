@@ -1,0 +1,43 @@
+﻿@model DrugCompare.Models.DashboardViewModel
+
+<h3>Prescription Details</h3>
+
+<article>
+    <div>
+        <table border="1">
+            <tr>
+                <td align="center">Drug Name</td>
+                <td align="center">Doseage Name</td>
+                <td align="center">Drug Quantity</td>
+                <td align="center">Drug Price</td>
+                <td align="center"></td>
+            </tr>
+            @foreach (var item in Model.SelectedPrescriptionVM)
+            {
+                <tr>
+                    <td>
+                        @Html.Hidden("DrugId", @item.DrugId)
+                        <span>@item.DrugName</span>
+                    </td>
+                    <td>
+                        @Html.Hidden("DoseId", @item.DoseId)
+                        <span>@item.DoseageName</span>
+                    </td>
+                    <td>
+                        <span>@item.DrugQuantity</span>
+                    </td>
+                    <td>
+                        <span>@item.DrugPrice</span>
+                    </td>
+                    <td>
+                        <input type="button" value="Change Plan" class="btn btn-primary" id="btn_selectPlan" />
+                    </td>
+
+                </tr>
+            }
+        </table>
+
+    </div>
+</article>
+
+
