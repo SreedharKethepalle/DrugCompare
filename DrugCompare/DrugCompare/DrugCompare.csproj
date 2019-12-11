@@ -271,6 +271,7 @@
     <Content Include="Views\Home\Partial_Prescription.cshtml" />
     <Content Include="Views\Home\Partial_Provider.cshtml" />
     <Content Include="Views\Home\Partial_Pharmacy.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

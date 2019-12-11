@@ -129,7 +129,7 @@ namespace DrugCompare.Models
         public int DrugQuantity { get; set; }
         public int DrugPrice { get; set; }
 
-        
+
     }
 
     public class SelectedProviderViewModel
@@ -161,13 +161,24 @@ namespace DrugCompare.Models
     }
 
     public class PlansList
-    { 
+    {
         public int PlanId { get; set; }
         public string PlanName { get; set; }
 
     }
 
+    public class Login
+    {
+        public int UserID { get; set; }
 
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+    }
 
 
 

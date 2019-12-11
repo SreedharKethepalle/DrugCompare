@@ -14,28 +14,65 @@ namespace DrugCompare.Controllers
     {
         string conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
 
-        public ActionResult Index()
+
+        #region Login
+
+        [HttpGet]
+        public ActionResult Login()
         {
-            return View();
+            return View(new Login());
         }
 
-        public ActionResult About()
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult Login(Login login)
         {
-            ViewBag.Message = "Your application description page.";
+            if (ModelState.IsValid)
+            {
+                login.UserID = validateLogin(login.UserName, login.Password);
+                if (login.UserID != 0)
+                    Session["User"] = login;
+                else
+                    ModelState.AddModelError("", "Please enter correct userName and Password");
 
-            return View();
+                if (ModelState.IsValid)
+                {
+                    Session["Plans"] = getPlansList(2019);
+                    return RedirectToAction("Dashboard", new { userId = login.UserID });
+                }
+                else
+                    return View();
+            }
+            else
+                return View();
         }
 
-        public ActionResult Contact()
+        private int validateLogin(string userName, string password)
         {
-            ViewBag.Message = "Your contact page.";
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
 
-            return View();
+                    cmd.CommandText = "[dbo].[Sp_ValidateLoginUser]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserName", userName);
+                    cmd.Parameters.AddWithValue("Password", password);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+            return ret;
         }
+        #endregion
 
-        public ActionResult Dashboard(int userId = 0)
+        public ActionResult Dashboard(int userId)
         {
-            Session["Plans"] = getPlansList(2019);
 
             List<PlansList> _planNames = new List<PlansList>();
             _planNames = (List<PlansList>)Session["Plans"];
@@ -48,7 +85,8 @@ namespace DrugCompare.Controllers
 
         public ActionResult PlanList()
         {
-            return RedirectToAction("Dashboard", new { userId = 100 });
+            var UserData = Session["User"] as Login;
+            return RedirectToAction("Dashboard", new { userId = UserData.UserID });
         }
 
         private DashboardViewModel getDashBoardDetails(int userId)
@@ -75,7 +113,7 @@ namespace DrugCompare.Controllers
             }
 
             _dashboard = dashboardList(ds);
-            
+
 
             return _dashboard;
         }
@@ -87,13 +125,13 @@ namespace DrugCompare.Controllers
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 List<SelectedPlanInfo> _UserSelectedPlans = new List<SelectedPlanInfo>();
-                _dashboard.SelectedPlanInfoVM = Common.ConvertToList<SelectedPlanInfo>(ds.Tables[0]); 
+                _dashboard.SelectedPlanInfoVM = Common.ConvertToList<SelectedPlanInfo>(ds.Tables[0]);
             }
 
             if (ds != null && ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
             {
                 List<SelectedPrescriptionViewModel> _Prescriptionn = new List<SelectedPrescriptionViewModel>();
-                _dashboard.SelectedPrescriptionVM = Common.ConvertToList<SelectedPrescriptionViewModel>(ds.Tables[1]); 
+                _dashboard.SelectedPrescriptionVM = Common.ConvertToList<SelectedPrescriptionViewModel>(ds.Tables[1]);
             }
 
             if (ds != null && ds.Tables.Count > 2 && ds.Tables[2].Rows.Count > 0)
