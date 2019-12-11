@@ -9,3 +9,5 @@
     [CreatedDate] DATETIME NOT NULL, 
     [StatusFlag] BIT NULL DEFAULT 1
 )
+
+---
