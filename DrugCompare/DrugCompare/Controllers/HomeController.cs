@@ -38,7 +38,7 @@ namespace DrugCompare.Controllers
                 if (ModelState.IsValid)
                 {
                     Session["Plans"] = getPlansList(2019);
-                    return RedirectToAction("Dashboard", new { userId = login.UserID });
+                    return RedirectToAction("Dashboard");
                 }
                 else
                     return View();
@@ -71,22 +71,25 @@ namespace DrugCompare.Controllers
         }
         #endregion
 
-        public ActionResult Dashboard(int userId)
+        public ActionResult Dashboard()
         {
+            var _login = (Login)Session["User"];
 
             List<PlansList> _planNames = new List<PlansList>();
             _planNames = (List<PlansList>)Session["Plans"];
 
-            var _dashboard = getDashBoardDetails(userId);
+            var _dashboard = getDashBoardDetails(_login.UserID);
             _dashboard.PlanLists = _planNames;
 
             return View(_dashboard);
         }
 
-        public ActionResult PlanList()
+        [HttpPost]
+        public ActionResult PlanList(int? SelectedPlanId )
         {
-            var UserData = Session["User"] as Login;
-            return RedirectToAction("Dashboard", new { userId = UserData.UserID });
+           // var UserData = Session["User"] as Login;
+
+            return RedirectToAction("Dashboard");
         }
 
         private DashboardViewModel getDashBoardDetails(int userId)

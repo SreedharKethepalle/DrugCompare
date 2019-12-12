@@ -44,7 +44,7 @@
                     </div>
                     <div class="modal-body" style="text-align:center;">
                         <div>
-                            <table border="1">
+                            <table class="table-bordered table-striped" border="1">
                                 <tr>
                                     <td>Select</td>
                                     <td>Plan Names</td>
@@ -57,7 +57,7 @@
                                             <input id="Planid" name="PlanId" type="radio" planid="@item.PlanId" />
                                         </td>
                                         <td>
-                                            @Html.Hidden("PlanId", @item.PlanId)
+                                            @*@Html.Hidden("PlanId", @item.PlanId)*@
                                             @item.PlanName
                                         </td>
                                     </tr>
@@ -69,7 +69,8 @@
                                                    value="Go Somewhere Else"
                                                    onclick="location.href='<%: Url.Action(" Action", "Controller" ) %>'" />*@
 
-                                        <a id="PlanSelectionButton" href="@Url.Action("PlanList", "Home")" class="btn btn-default">Select Plan</a>
+                                        @*<a id="btn_PlanSubmit" href="@Url.Action("PlanList", "Home")" class="btn btn-default">Select Plan</a>*@
+                                        <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
                                     </td>
                                 </tr>
                             </table>
@@ -86,15 +87,59 @@
         integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE="
         crossorigin="anonymous"></script>
 
-<script type="text/javascript">
-   
+<script>
     $("#btn_selectPlan").click(function () {
         $('#selectPlanModalPopUp').modal('show');
     });
+    var k=0;
+    $("input[name=PlanId]").click(function () {
 
-    //$(document).on("click", "#selectPlanModalPopUp", function () {
-    //    alert("Handler for .focus() called.");
+        k = $(this).attr("planid");
+        $('#btn_PlanSubmit').val("Save Selected Plan");
+        $('#btn_PlanSubmit').addClass("text-success");
+        console.log(k);
+    });
+
+    $('#btn_PlanSubmit').on('click', function () {
+        debugger;
+        var SelectedPlanId = parseInt(k);
+
+        $.ajax({
+            type: "POST",
+            url: "PlanList",
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            cache: false,
+            data: { 'SelectedPlanId': SelectedPlanId },
+            success: function (d) {
+                if (d.success == true) {
+                    debugger;
+                    window.location = "index.html";
+                }
+                else { }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger;
+                console.log(xhr.responseText);
+            }
+        });
+
+        $('#selectPlanModalPopUp').modal('hide');
+
+
+    });
+
+    //$("button").click(function () {
+    //    $.post("demo_test_post.asp",
+    //    {
+    //        name: "Donald Duck",
+    //        city: "Duckburg"
+    //    },
+    //    function (data, status) {
+    //        alert("Data: " + data + "\nStatus: " + status);
+    //    });
     //});
+
 </script>
 
 
