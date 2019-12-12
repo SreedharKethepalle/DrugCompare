@@ -127,7 +127,9 @@ namespace DrugCompare.Models
         public int DoseId { get; set; }
         public string DoseageName { get; set; }
         public int DrugQuantity { get; set; }
-        public int DrugPrice { get; set; }
+        public decimal DrugPrice { get; set; }
+
+        public string FrequencyName { get; set; }
 
 
     }
@@ -137,8 +139,8 @@ namespace DrugCompare.Models
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
         public string ProviderAddress { get; set; }
-        public int ProviderPhone { get; set; }
-        public int ProviderExperience { get; set; }
+        public long ProviderPhone { get; set; }
+        public long ProviderExperience { get; set; }
     }
 
     public class SelectedPharmacyViewModel

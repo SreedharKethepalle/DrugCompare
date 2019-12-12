@@ -10,14 +10,16 @@
                 <td align="center">Doseage Name</td>
                 <td align="center">Drug Quantity</td>
                 <td align="center">Drug Price</td>
-                <td align="center"></td>
+                <td align="center">Frequecncy</td>
+                @*<input type="button" class="btn btn-primary" id="btn_AddNewDrug" /><i class="fa fa-plus-square"></i>Add New Prescrition*@
+                <td align="center"><a href="@Url.Action("AddOrEdit","Employee")" class="btn btn-default"><i class="fa fa-plus-square"></i> Add New Prescrition</a>
             </tr>
             @foreach (var item in Model.SelectedPrescriptionVM)
             {
                 <tr>
                     <td>
                         @Html.Hidden("DrugId", @item.DrugId)
-                        <span>@item.DrugName</span>
+                        <a id="DrugName" DrugId="@item.DrugId"><span>@item.DrugName</span></a>
                     </td>
                     <td>
                         @Html.Hidden("DoseId", @item.DoseId)
@@ -30,14 +32,76 @@
                         <span>@item.DrugPrice</span>
                     </td>
                     <td>
-                        <input type="button" value="Change Plan" class="btn btn-primary" id="btn_selectPlan" />
+                        <span>@item.FrequencyName</span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("AddOrEdit","Employee")" class="btn btn-default"><i class="fas fa-fill-drip"></i> Refilling \ Alternatives</a>
                     </td>
 
                 </tr>
             }
         </table>
+    </div>
+    <div class="modal fade" id="selectPlanModalPopUp" role="dialog">
+        <div class="modal-dialog err-pop" style="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Plan Details</span>
+                    <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" style="text-align:center;">
+                    <div>
+                        <table border="1">
+                            <thead></thead>
+                            <thead></thead>
+                            <thead></thead>
+                            <tr>
+                                <td>
+                                    <div>
+                                        @for (int i = 0; i <= 6; i++)
+                                        {
+                                            <text>ddsdsd</text><br>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Select</td>
+                                <td>Plan Names</td>
+                            </tr>
 
+                            @foreach (var item in Model.PlanLists)
+                            {
+                                <tr>
+                                    <td>
+                                        <input id="Planid" name="PlanId" type="radio" planid="@item.PlanId" />
+                                    </td>
+                                    <td>
+                                        @Html.Hidden("PlanId", @item.PlanId)
+                                        @item.PlanName
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="2">
+                                    <a id="PlanSelectionButton" href="@Url.Action("PlanList", "Home")" class="btn btn-default">Select Plan</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </article>
+<script src="https://code.jquery.com/jquery-1.10.0.min.js"
+        integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE="
+        crossorigin="anonymous"></script>
 
-
+<script type="text/javascript">
+    var h = $('#DrugName').attr('DrugId');
+    debugger;
+    $("#DrugName").click(function () {
+        $('#selectPlanModalPopUp').modal('show');
+    });
+</script>
