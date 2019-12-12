@@ -85,10 +85,10 @@ namespace DrugCompare.Controllers
         }
 
         [HttpPost]
-        public ActionResult PlanList(int? SelectedPlanId )
+        public ActionResult PlanList(int SelectedPlanId )
         {
-           // var UserData = Session["User"] as Login;
-
+            var _login = (Login)Session["User"];
+            var _status = UpdatePlansForUser(_login.UserID, SelectedPlanId);
             return RedirectToAction("Dashboard");
         }
 
@@ -178,14 +178,30 @@ namespace DrugCompare.Controllers
 
             return _plansList;
         }
+
+        private int UpdatePlansForUser(int userId, int planId) 
+        {
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_UpdatePlansForUser]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserId", userId);
+                    cmd.Parameters.AddWithValue("PlanId", planId);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+            return ret;
+        }
     }
 }
 
 
-//DashboardViewModel _dashboard = new DashboardViewModel
-//{
-//    UserPlansVM = new UserPlanViewModel { PlanId = 102, PlanName = "halla gilla plan" },
-//    PrescriptionVM = new PrescriptionViewModel { DrugId = 101, DrugName = "Dolo", DoseId = 101, DoseageName = "Dolo - 650" },
-//    ProviderVM = new ProviderViewModel { ProviderId = 101, ProviderName = "Shree Krishna Clinic" },
-//    PharmacyVM = new PharmacyViewModel { PharmacyId = 101, PharmacyName = "Apollo Pharmacy" }
-//};
