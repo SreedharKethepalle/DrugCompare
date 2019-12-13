@@ -80,11 +80,11 @@ namespace DrugCompare.Controllers
             List<PlansList> _planNames = new List<PlansList>();
             _planNames = (List<PlansList>)Session["Plans"];
 
-            List<SelectedProviderViewModel> _providerNames = new List<SelectedProviderViewModel>();
-            _providerNames = (List<SelectedProviderViewModel>)Session["Providers"];
+            List<ProviderViewModel> _providerNames = new List<ProviderViewModel>();
+            _providerNames = (List<ProviderViewModel>)Session["Providers"];
 
-            List<SelectedPharmacyViewModel> _pharmacyNames = new List<SelectedPharmacyViewModel>();
-            _pharmacyNames = (List<SelectedPharmacyViewModel>)Session["Pharmacy"];
+            List<PharmacyViewModel> _pharmacyNames = new List<PharmacyViewModel>();
+            _pharmacyNames = (List<PharmacyViewModel>)Session["Pharmacy"];
 
             
             var _dashboard = getDashBoardDetails(_login.UserID);
@@ -158,12 +158,12 @@ namespace DrugCompare.Controllers
 
             if (ds != null && ds.Tables.Count > 2 && ds.Tables[2].Rows.Count > 0)
             {
-                _dashboard.SelectedProviderVM = Common.ConvertToList<SelectedProviderViewModel>(ds.Tables[2]);
+                _dashboard.SelectedProviderVM = Common.ConvertToList<ProviderViewModel>(ds.Tables[2]);
             }
 
             if (ds != null && ds.Tables.Count > 3 && ds.Tables[3].Rows.Count > 0)
             {
-                _dashboard.SelectedPharmacyVM = Common.ConvertToList<SelectedPharmacyViewModel>(ds.Tables[3]);
+                _dashboard.SelectedPharmacyVM = Common.ConvertToList<PharmacyViewModel>(ds.Tables[3]);
             }
 
             return _dashboard;
@@ -197,9 +197,9 @@ namespace DrugCompare.Controllers
         }
 
 
-        private List<SelectedProviderViewModel> getProvidersList()
+        private List<ProviderViewModel> getProvidersList()
         {
-            List<SelectedProviderViewModel> _providersList = new List<SelectedProviderViewModel>();
+            List<ProviderViewModel> _providersList = new List<ProviderViewModel>();
             DataSet ds = new DataSet();
 
             using (SqlConnection con = new SqlConnection(conn))
@@ -219,14 +219,14 @@ namespace DrugCompare.Controllers
                 }
             }
 
-            _providersList = Common.ConvertToList<SelectedProviderViewModel>(ds.Tables[0]);
+            _providersList = Common.ConvertToList<ProviderViewModel>(ds.Tables[0]);
 
             return _providersList;
         }
 
-        private List<SelectedPharmacyViewModel> getPharmacyList()
+        private List<PharmacyViewModel> getPharmacyList()
         {
-            List<SelectedPharmacyViewModel> _pharmacyList = new List<SelectedPharmacyViewModel>();
+            List<PharmacyViewModel> _pharmacyList = new List<PharmacyViewModel>();
             DataSet ds = new DataSet();
 
             using (SqlConnection con = new SqlConnection(conn))
@@ -245,7 +245,7 @@ namespace DrugCompare.Controllers
                 }
             }
 
-            _pharmacyList = Common.ConvertToList<SelectedPharmacyViewModel>(ds.Tables[0]);
+            _pharmacyList = Common.ConvertToList<PharmacyViewModel>(ds.Tables[0]);
 
             return _pharmacyList;
         }

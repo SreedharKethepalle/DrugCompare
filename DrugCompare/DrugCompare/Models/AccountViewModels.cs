@@ -114,11 +114,11 @@ namespace DrugCompare.Models
     {
         public List<SelectedPlanInfo> SelectedPlanInfoVM { get; set; }
         public List<SelectedPrescriptionViewModel> SelectedPrescriptionVM { get; set; }
-        public List<SelectedProviderViewModel> SelectedProviderVM { get; set; }
-        public List<SelectedPharmacyViewModel> SelectedPharmacyVM { get; set; }
+        public List<ProviderViewModel> SelectedProviderVM { get; set; }
+        public List<PharmacyViewModel> SelectedPharmacyVM { get; set; }
         public List<PlansList> PlanListsVM { get; set; }
-        public List<SelectedProviderViewModel> ProviderListsVM { get; set; }
-        public List<SelectedPharmacyViewModel> PharmacyListsVM { get; set; }
+        public List<ProviderViewModel> ProviderListsVM { get; set; }
+        public List<PharmacyViewModel> PharmacyListsVM { get; set; }
 
 
     }
@@ -138,7 +138,7 @@ namespace DrugCompare.Models
 
     }
 
-    public class SelectedProviderViewModel
+    public class ProviderViewModel
     {
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
@@ -147,7 +147,7 @@ namespace DrugCompare.Models
         public long ProviderExperience { get; set; }
     }
 
-    public class SelectedPharmacyViewModel
+    public class PharmacyViewModel
     {
         public int PharmacyId { get; set; }
         public string PharmacyName { get; set; }

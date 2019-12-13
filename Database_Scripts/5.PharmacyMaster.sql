@@ -5,5 +5,6 @@
     [PharmacyZip] INT NULL, 
     [Address] NVARCHAR(MAX) NULL, 
 	[Timings] NVARCHAR(MAX),
-    [StatusFlag] BIT NULL
+    [StatusFlag] BIT NULL,
+	[PharmacyPhone] int
 )
