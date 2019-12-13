@@ -358,7 +358,6 @@ namespace DrugCompare.Controllers
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
             {
-                ds.Tables[1].Columns["DrugID "].ColumnName = "DrugID";
                 drugVm.DrugDosageInfo = Common.ConvertToList<DrugDosageInfo>(ds.Tables[1]);
             }
 

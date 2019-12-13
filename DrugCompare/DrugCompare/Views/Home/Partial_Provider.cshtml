@@ -14,27 +14,30 @@
                 <td align="center">Provider Experience</td>
                 <td align="center"></td>
             </tr>
-
-            @foreach (var item in Model.SelectedProviderVM)
-            {
-                <tr>
-                    <td>
-                        @Html.Hidden("ProviderId", @item.ProviderId)
-                        <span>@item.ProviderName</span>
-                    </td>
-                    <td>
-                        <span>@item.ProviderAddress</span>
-                    </td>
-                    <td>
-                        <span>@item.ProviderPhone</span>
-                    </td>
-                    <td>
-                        <span>@item.ProviderExperience</span>
-                    </td>
-                    <td>
-                        <a id="btn_selectProvider" class="btn btn-default"><i class="fas fa-sync"></i> Change Provider</a>
-                    </td>
-                </tr>
+            @{ if (Model.SelectedProviderVM != null && Model.SelectedProviderVM.Count > 0)
+                {
+                    foreach (var item in Model.SelectedProviderVM)
+                    {
+                        <tr>
+                            <td>
+                                @Html.Hidden("ProviderId", @item.ProviderId)
+                                <span>@item.ProviderName</span>
+                            </td>
+                            <td>
+                                <span>@item.ProviderAddress</span>
+                            </td>
+                            <td>
+                                <span>@item.ProviderPhone</span>
+                            </td>
+                            <td>
+                                <span>@item.ProviderExperience</span>
+                            </td>
+                            <td>
+                                <a id="btn_selectProvider" class="btn btn-default"><i class="fas fa-sync"></i> Change Provider</a>
+                            </td>
+                        </tr>
+                    }
+                }
             }
         </table>
     </div>
@@ -46,6 +49,9 @@
                 <div class="modal-header">
                     <span>Provider Details</span>
                     <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="errorMsg" hidden="hidden">
+                    <span style="color:red;">Please select Provider</span>
                 </div>
                 <div class="modal-body" style="text-align:center;">
                     <div>
@@ -101,13 +107,14 @@
 
     $("#btn_selectProvider").click(function () {
         $('#selectProviderModalPopUp').modal('show');
+        $('#errorMsg').hide();
     });
 
     $("input[name=ProviderId]").click(function () {
 
         SelectedProvider = $(this).attr("providerid");
-        $('#btn_ProviderSubmit').val("Save Selected Provider");
-        $('#btn_ProviderSubmit').addClass("text-success");
+        $('#btn_ProviderSubmit').val("Save Selected Provider").css({ "background-color": "lightgreen" });
+        //$('#btn_ProviderSubmit').addClass("text-success");
         console.log(SelectedPlan);
     });
 
@@ -115,15 +122,15 @@
         debugger;
         var SelectedProviderId = parseInt(SelectedProvider);
 
-        var jqxhr = $.post("ProvidersList", { 'SelectedProviderId': SelectedProviderId });
-        window.location.reload();
-
-        $('#selectProviderModalPopUp').modal('hide');
-
+        if (SelectedProviderId > 0) {
+            var jqxhr = $.post("ProvidersList", { 'SelectedProviderId': SelectedProviderId });
+            window.location.reload();
+        }
+        else {
+            $('#errorMsg').show();
+        }
 
     });
 
 
 </script>
-
-

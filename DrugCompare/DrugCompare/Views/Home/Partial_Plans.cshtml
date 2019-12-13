@@ -13,24 +13,27 @@
                 <td align="center">Plan Year</td>
                 <td align="center"></td>
             </tr>
-
-            @foreach (var item in Model.SelectedPlanInfoVM)
-            {
-                <tr>
-                    <td>
-                        @Html.Hidden("PlanId", @item.PlanId)
-                        <span>@item.PlanName</span>
-                    </td>
-                    <td>
-                        <span>@item.PlanTypeName</span>
-                    </td>
-                    <td>
-                        <span>@item.PlanYear</span>
-                    </td>
-                    <td>
-                        <a id="btn_selectPlan" class="btn btn-default"><i class="fas fa-sync"></i> Change Plan</a>
-                    </td>
-                </tr>
+            @{ if (Model.SelectedPlanInfoVM != null && Model.SelectedPlanInfoVM.Count > 0)
+                {
+                    foreach (var item in Model.SelectedPlanInfoVM)
+                    {
+                        <tr>
+                            <td>
+                                @Html.Hidden("PlanId", @item.PlanId)
+                                <span>@item.PlanName</span>
+                            </td>
+                            <td>
+                                <span>@item.PlanTypeName</span>
+                            </td>
+                            <td>
+                                <span>@item.PlanYear</span>
+                            </td>
+                            <td>
+                                <a id="btn_selectPlan" class="btn btn-default"><i class="fas fa-sync"></i> Change Plan</a>
+                            </td>
+                        </tr>
+                    }
+                }
             }
         </table>
     </div>
@@ -42,6 +45,9 @@
                     <div class="modal-header">
                         <span>Plan Details</span>
                         <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div id="errorMsg1" hidden="hidden">
+                        <span style="color:red;">Please select Plans</span>
                     </div>
                     <div class="modal-body" style="text-align:center;">
                         <div>
@@ -64,7 +70,7 @@
                                 }
                                 <tr>
                                     <td colspan="2">
-                                       <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
+                                        <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
                                     </td>
                                 </tr>
                             </table>
@@ -88,30 +94,30 @@
 
     $("#btn_selectPlan").click(function () {
         $('#selectPlanModalPopUp').modal('show');
+        $('#errorMsg1').hide();
     });
-    
+
     $("input[name=PlanId]").click(function () {
 
         SelectedPlan = $(this).attr("planid");
-        $('#btn_PlanSubmit').val("Save Selected Plan");
-        $('#btn_PlanSubmit').addClass("text-success");
+        $('#btn_PlanSubmit').val("Save Selected Plan").css({ "background-color": "lightgreen" });
+        //$('#btn_PlanSubmit').addClass("text-success");
         console.log(SelectedPlan);
     });
 
     $('#btn_PlanSubmit').click(function () {
         debugger;
         var SelectedPlanId = parseInt(SelectedPlan);
+        if (SelectedPlanId > 0) {
+            var jqxhr = $.post("PlanList", { 'SelectedPlanId': SelectedPlanId });
+            window.location.reload();
 
-        var jqxhr = $.post("PlanList", { 'SelectedPlanId': SelectedPlanId });
-        window.location.reload();
-
-        $('#selectPlanModalPopUp').modal('hide');
-
+        }
+        else {
+            $('#errorMsg1').show();
+        }
 
     });
 
 
 </script>
-
-
-
