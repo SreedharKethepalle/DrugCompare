@@ -19,7 +19,8 @@
                 <tr>
                     <td>
                         @Html.Hidden("DrugId", @item.DrugId)
-                        <span>@item.DrugName</span>
+                        <span>@item.DrugName</span><br />
+                        <a href='@Url.Action("DeleteDrug", "Home",  new { DrugId = item.DrugId })'>Delete</a>
                     </td>
                     <td>
                         @Html.Hidden("DoseId", @item.DoseId)

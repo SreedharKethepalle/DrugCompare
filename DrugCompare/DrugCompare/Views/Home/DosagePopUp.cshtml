@@ -71,7 +71,7 @@
 
                 </div>
                 <div>
-                    <button id="btn_Dosageinfo" class="btn btn-default" style="text-align:right"> <i class="far fa-list-alt"></i>  Add to your prescription list</button>
+                    <button id="btn_Dosageinfo" class="btn btn-default" style="text-align:right">  Select your drug data</button>
                 </div>
             </div>
         </div>
@@ -93,7 +93,13 @@
             //console.log("FrequencyIdVal:"+FrequencyIdVal);
         }
     });
-
+    document.getElementById('selectPlanModalPopUp').onclick = function () {
+        var QuantityVal = $("#Quantity").val();
+        if (DoasgeInfoVal != 0 && FrequencyIdVal != 0 && (QuantityVal != null || QuantityVal != undefined || QuantityVal != ""))
+            $('#btn_Dosageinfo').text("Add Drug to your Prescription List").css({ "background-color": "lightgreen" });
+        else
+            $('#btn_Dosageinfo').text("Select your drug data").css({ "background-color": "" ,"colour":"red"});
+    }
 
     function validate() {
         var QuantityVal = $("#Quantity").val();

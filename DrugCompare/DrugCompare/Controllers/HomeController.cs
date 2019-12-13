@@ -263,7 +263,7 @@ namespace DrugCompare.Controllers
             return ret;
         }
 
-        #region Add Prescription
+        #region Add or delete Prescription
 
         #region AddPrescription Db Calls
         private DrugVM GetDrugs()
@@ -337,6 +337,29 @@ namespace DrugCompare.Controllers
                 }
             }
         }
+
+        private void Delete(int? drugID,int userID)
+        {
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_DeleteDrug]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserId", userID);
+                    cmd.Parameters.AddWithValue("DrugID", drugID);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+            //return ret;
+        }
         #endregion
 
         public ActionResult AddNewPrescription()
@@ -361,6 +384,15 @@ namespace DrugCompare.Controllers
             saveDrug(DoasgeInfoVal, FrequencyIdVal, QuantityVal, User.UserID);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeleteDrug(int? DrugId)
+        {
+            var User = Session["User"] as Login;
+            Delete(DrugId, User.UserID);
+
+            return RedirectToAction("DashBoard");
+        }
+
         #endregion
     }
 }
