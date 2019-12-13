@@ -118,6 +118,8 @@ namespace DrugCompare.Models
         public List<SelectedPharmacyViewModel> SelectedPharmacyVM { get; set; }
         public List<PlansList> PlanListsVM { get; set; }
         public List<SelectedProviderViewModel> ProviderListsVM { get; set; }
+        public List<SelectedPharmacyViewModel> PharmacyListsVM { get; set; }
+
 
     }
 

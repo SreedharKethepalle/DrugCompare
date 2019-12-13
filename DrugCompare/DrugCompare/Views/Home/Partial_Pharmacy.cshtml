@@ -50,23 +50,22 @@
                                     <td>Pharmacy Name</td>
                                     <td>Pharmacy Address</td>
                                     <td>Pharmacy Phone</td>
-
                                 </tr>
 
-                                @foreach (var item in Model.PlanListsVM)
+                                @foreach (var item in Model.PharmacyListsVM)
                                 {
                                     <tr>
                                         <td>
-                                            <input id="Pharmacyid" name="PharmacyId" type="radio" Pharmacyid="@item.PlanId" />
+                                            <input id="Pharmacyid" name="PharmacyId" type="radio" Pharmacyid="@item.PharmacyId" />
                                         </td>
                                         <td>
-                                            @item.PlanName
+                                            @item.PharmacyName
                                         </td>
                                         <td>
-                                            @item.PlanName
+                                            @item.PharmacyAddress
                                         </td>
                                         <td>
-                                            @item.PlanName
+                                            @item.PharmacyPhone
                                         </td>
                                     </tr>
                                 }
@@ -107,9 +106,6 @@
 
         var jqxhr = $.post("PharmacyList", { 'SelectedPharmacyId': SelectedPharmacyId });
         window.location.reload();
-
-      //  $('#selectPharmacyModalPopUp').modal('hide');
-
 
     });
 

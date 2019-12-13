@@ -39,6 +39,7 @@ namespace DrugCompare.Controllers
                 {
                     Session["Plans"] = getPlansList(2019);
                     Session["Providers"] = getProvidersList();
+                    Session["Pharmacy"] = getPharmacyList();
                     return RedirectToAction("Dashboard");
                 }
                 else
@@ -82,28 +83,34 @@ namespace DrugCompare.Controllers
             List<SelectedProviderViewModel> _providerNames = new List<SelectedProviderViewModel>();
             _providerNames = (List<SelectedProviderViewModel>)Session["Providers"];
 
+            List<SelectedPharmacyViewModel> _pharmacyNames = new List<SelectedPharmacyViewModel>();
+            _pharmacyNames = (List<SelectedPharmacyViewModel>)Session["Pharmacy"];
 
+            
             var _dashboard = getDashBoardDetails(_login.UserID);
             _dashboard.PlanListsVM = _planNames;
             _dashboard.ProviderListsVM = _providerNames;
+            _dashboard.PharmacyListsVM = _pharmacyNames;
 
             return View(_dashboard);
         }
 
-        [HttpPost]
-        public ActionResult PlanList(int SelectedPlanId)
+        public void PlanList(int SelectedPlanId)
         {
             var _login = (Login)Session["User"];
             var _status = UpdatePlansForUser(_login.UserID, SelectedPlanId);
-            return RedirectToAction("Dashboard");
         }
 
-        [HttpPost]
-        public ActionResult ProvidersList(int SelectedProviderId)
+        public void ProvidersList(int SelectedProviderId)
         {
             var _login = (Login)Session["User"];
             var _status = UpdateProvidersForUser(_login.UserID, SelectedProviderId);
-            return RedirectToAction("Dashboard");
+        }
+
+        public void PharmacyList(int SelectedPharmacyId)
+        {
+            var _login = (Login)Session["User"];
+            var _status = UpdatePharmacyForUser(_login.UserID, SelectedPharmacyId);
         }
 
         private DashboardViewModel getDashBoardDetails(int userId)
@@ -217,6 +224,32 @@ namespace DrugCompare.Controllers
             return _providersList;
         }
 
+        private List<SelectedPharmacyViewModel> getPharmacyList()
+        {
+            List<SelectedPharmacyViewModel> _pharmacyList = new List<SelectedPharmacyViewModel>();
+            DataSet ds = new DataSet();
+
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_GetPharmacyList]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+
+                    con.Close();
+                }
+            }
+
+            _pharmacyList = Common.ConvertToList<SelectedPharmacyViewModel>(ds.Tables[0]);
+
+            return _pharmacyList;
+        }
+
         private int UpdatePlansForUser(int userId, int planId)
         {
             int ret = 0;
@@ -252,6 +285,29 @@ namespace DrugCompare.Controllers
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("UserId", userId);
                     cmd.Parameters.AddWithValue("ProviderId", providerId);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+            return ret;
+        }
+
+        private int UpdatePharmacyForUser(int userId, int pharmacyId)
+        {
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_UpdatePharmacyForUser]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserId", userId);
+                    cmd.Parameters.AddWithValue("PharmacyId", pharmacyId);
 
                     var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                     returnParameter.Direction = ParameterDirection.ReturnValue;
