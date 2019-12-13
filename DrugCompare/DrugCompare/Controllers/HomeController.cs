@@ -320,10 +320,10 @@ namespace DrugCompare.Controllers
         } 
 
         [HttpPost]
-        public ActionResult HiddenDrugValue(int? s)
+        public ActionResult PopupData(int? drugValue)
         {
             var DrugVM = GetDrugs();
-            DrugVM.DrugDosageInfo = DrugVM.DrugDosageInfo.Where(x => x.DrugId == s).ToList();
+            DrugVM.DrugDosageInfo = DrugVM.DrugDosageInfo.Where(x => x.DrugId == drugValue).ToList();
             return PartialView("DosagePopUp", DrugVM);
         }
 

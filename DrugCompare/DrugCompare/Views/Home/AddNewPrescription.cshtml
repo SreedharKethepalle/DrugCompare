@@ -68,8 +68,8 @@
     $('span#SelectedDrug').click(function () {
         $.ajax({
             type: 'POST',
-            url: 'HiddenDrugValue',
-            data: '{s:' + parseInt($(this).attr("DrugID")) + '}',
+            url: 'PopupData',
+            data: '{DrugValue:' + parseInt($(this).attr("DrugID")) + '}',
             success: function (data) {
                 $('#popup').html(data);
                 $('#selectPlanModalPopUp').modal('show');
