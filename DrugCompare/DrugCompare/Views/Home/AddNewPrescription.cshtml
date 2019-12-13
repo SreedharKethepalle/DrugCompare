@@ -1,0 +1,87 @@
+﻿@model DrugCompare.Models.DrugVM
+
+@{
+    ViewBag.Title = "AddNewPrescription";
+}
+
+<h2>Add New Prescription</h2>
+<div style="text-align:right">
+    @*<a class="btn btn-default"> <i class="far fa-list-alt"></i>  Add to your prescription list</a>*@
+</div>
+<table id="DrugTable" class="table">
+    <tr>
+        @*<th>
+                Select the drug
+            </th>*@
+        <th>
+            Drug Name
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+
+    @Html.Hidden("HiddenDrugID", 0)
+    @foreach (var item in Model.DrugInfo)
+    {
+        <tr>
+            @*<td >
+                    <input type="checkbox" DrugID="@item.DrugID" id="DrugID" />
+                </td>*@
+            <td>
+                @Html.HiddenFor(modelItem => item.DrugID)
+                @Html.HiddenFor(modelItem => item.PrimaryDrugId)
+                @Html.DisplayFor(modelItem => item.DrugName)
+            </td>
+            <td>
+                @*<span class="btn btn-default" id="Status_@item.DrugID">Select Drug</span>*@
+                <span class="btn btn-default" id="SelectedDrug" DrugID="@item.DrugID">Select Drug</span>
+            </td>
+        </tr>
+    }
+
+</table>
+<div id="popup">
+
+</div>
+
+<script>
+
+    //// Used for multiple drug selection code
+    //var temp = [];
+    //$('input[type="checkbox"]').click(function () {
+    //    if ($(this).prop("checked") == true) {
+    //        if (temp.indexOf(parseInt($(this).attr("DrugID"))) === -1) {
+    //            temp.push(parseInt($(this).attr("DrugID")));
+    //            var d = $('#Status_' + parseInt($(this).attr("DrugID"))).text("Drug selected").css({ "background-color": "lightgreen" }); //.addClass("text-success");
+    //        }
+    //    }
+    //    else if ($(this).prop("checked") == false) {
+    //        var index = temp.indexOf(parseInt($(this).attr("DrugID")));
+    //        if (index > -1) {
+    //            temp.splice(index, 1);
+    //        }
+    //        $('#Status_' + parseInt($(this).attr("DrugID"))).text("Select Drug").css({ "background-color": "" });
+    //    }
+    //});
+
+    $('span#SelectedDrug').click(function () {
+        $.ajax({
+            type: 'POST',
+            url: 'HiddenDrugValue',
+            data: '{s:' + parseInt($(this).attr("DrugID")) + '}',
+            success: function (data) {
+                $('#popup').html(data);
+                $('#selectPlanModalPopUp').modal('show');
+            },
+            error: function (ex, dmxm, x) {
+                console.log(ex.responseText);
+            },
+            contentType: "application/json",
+            //dataType: 'json' -- if not commented it returns me a parse error
+        });
+        $('#HiddenDrugID').val(parseInt($(this).attr("DrugID"))); // Not working need to see
+
+    });
+
+</script>

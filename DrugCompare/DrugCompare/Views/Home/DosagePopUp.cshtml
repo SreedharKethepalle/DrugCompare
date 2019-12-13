@@ -1,0 +1,124 @@
+﻿@model DrugCompare.Models.DrugVM
+
+<div class="modal fade" id="selectPlanModalPopUp" role="dialog">
+    <div class="modal-dialog err-pop" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Plan Details</span>
+                <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="errorMessages">
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                @Html.Hidden("HiddenDrugID", 0)
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>Select</td>
+                                        <td>Dosage List</td>
+                                    </tr>
+                                    @foreach (var item in Model.DrugDosageInfo)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input id="DrugDoseId" name="DrugDoseId" type="radio" value="@item.DrugDoseId" DrugDoseId="@item.DrugDoseId" />
+                                            </td>
+                                            <td>
+                                                @Html.Hidden("PlanId", @item.DrugDoseId)
+                                                @item.DosageName
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>Quantity</tr>
+                                    <tr>
+                                        <td>
+                                            <input type="number" class="btn" id="Quantity" style="border:groove!important" value="" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>Select</td>
+                                        <td>Frequency Names</td>
+                                    </tr>
+                                    @foreach (var item in Model.DrugFrequencyInfo)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input id="FrequencyId" name="FrequencyId" type="radio" FrequencyId="@item.FrequencyId" />
+                                            </td>
+                                            <td>
+                                                @Html.Hidden("FrequencyId", @item.FrequencyId)
+                                                @item.FrequencyName
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div>
+                    <button id="btn_Dosageinfo" class="btn btn-default" style="text-align:right"> <i class="far fa-list-alt"></i>  Add to your prescription list</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var DoasgeInfoVal = 0;
+    $("input[name='DrugDoseId']").on('click', function () {
+        if ($(this).prop("checked") == true) {
+            DoasgeInfoVal = parseInt($(this).attr("DrugDoseId"));
+            //console.log("DoasgeInfoVal:"+DoasgeInfoVal);
+        }
+    });
+
+    var FrequencyIdVal = 0;
+    $("input[name='FrequencyId']").on('click', function () {
+        if ($(this).prop("checked") == true) {
+            FrequencyIdVal = parseInt($(this).attr("FrequencyId"));
+            //console.log("FrequencyIdVal:"+FrequencyIdVal);
+        }
+    });
+
+
+    function validate() {
+        var QuantityVal = $("#Quantity").val();
+        if (DoasgeInfoVal == 0)
+            errors = "please Select Dosage of Drug " + "<br />";
+        if (FrequencyIdVal == 0)
+            errors += "please Select Frequency of Drug" + "<br />";
+        if (QuantityVal == null || QuantityVal == undefined || QuantityVal == "")
+            errors += "Please enter the quantity of drug " + "<br />";
+
+        return errors;
+    }
+    var errors = "";
+
+    $('#btn_Dosageinfo').click(function () {
+        var QuantityVal = parseInt($("#Quantity").val());
+
+        errors = "";
+        errors = validate();
+        if (errors != "")
+            $('#errorMessages').html(errors).css('color', 'red');
+        else {
+            $('#errorMessages').html("");
+            console.log(DoasgeInfoVal, FrequencyIdVal, QuantityVal);
+        }
+    });
+
+</script>

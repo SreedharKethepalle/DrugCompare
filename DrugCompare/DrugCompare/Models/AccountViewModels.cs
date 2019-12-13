@@ -182,6 +182,44 @@ namespace DrugCompare.Models
         public string Password { get; set; }
     }
 
+    public class DrugInfo
+    {
+        public int DrugID { get; set; }
 
+        public string DrugName { get; set; }
 
+        public int PrimaryDrugId { get; set; }
+    }
+
+    public class DrugDosageInfo
+    {
+        public int DrugDoseId { get; set; }
+
+        public int DrugId { get; set; }
+
+        public string DosageName { get; set; }
+
+        public decimal UnitCost { get; set; }
+
+        public int HiddenDrugID { get; set; }
+    }
+
+    public class DrugFrequencyInfo
+    {
+        public int FrequencyId { get; set; }
+
+        public string FrequencyName { get; set; }
+
+        public int FrequencyDays { get; set; }
+    }
+
+    public class DrugVM
+    {
+        public List<DrugInfo> DrugInfo { get; set; }
+
+        public List<DrugDosageInfo> DrugDosageInfo { get; set; }
+
+        public List<DrugFrequencyInfo> DrugFrequencyInfo { get; set; }
+
+    }
 }

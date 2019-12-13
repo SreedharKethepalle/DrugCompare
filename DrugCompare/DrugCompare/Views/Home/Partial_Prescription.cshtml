@@ -12,7 +12,7 @@
                 <td align="center">Drug Price</td>
                 <td align="center">Frequecncy</td>
                 @*<input type="button" class="btn btn-primary" id="btn_AddNewDrug" /><i class="fa fa-plus-square"></i>Add New Prescrition*@
-                <td align="center"><a href="@Url.Action("AddOrEdit","Employee")" class="btn btn-default"><i class="fa fa-plus-square"></i> Add New Prescrition</a>
+                <td align="center"><a href="@Url.Action("AddNewPrescription","Home")" class="btn btn-default"><i class="fa fa-plus-square"></i> Add New Prescrition</a>
             </tr>
             @foreach (var item in Model.SelectedPrescriptionVM)
             {
@@ -94,9 +94,9 @@
         </div>
     </div>
 </article>
-<script src="https://code.jquery.com/jquery-1.10.0.min.js"
+@*<script src="https://code.jquery.com/jquery-1.10.0.min.js"
         integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>*@
 
 <script type="text/javascript">
     var h = $('#DrugName').attr('DrugId');
@@ -104,4 +104,8 @@
     $("#DrugName").click(function () {
         $('#selectPlanModalPopUp').modal('show');
     });
+
+    //$('input[name=PlanId]').on('click', function () {
+    //    alert('s');
+    //});
 </script>

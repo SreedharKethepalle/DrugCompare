@@ -124,25 +124,21 @@ namespace DrugCompare.Controllers
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                List<SelectedPlanInfo> _UserSelectedPlans = new List<SelectedPlanInfo>();
                 _dashboard.SelectedPlanInfoVM = Common.ConvertToList<SelectedPlanInfo>(ds.Tables[0]);
             }
 
             if (ds != null && ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
             {
-                List<SelectedPrescriptionViewModel> _Prescriptionn = new List<SelectedPrescriptionViewModel>();
                 _dashboard.SelectedPrescriptionVM = Common.ConvertToList<SelectedPrescriptionViewModel>(ds.Tables[1]);
             }
 
             if (ds != null && ds.Tables.Count > 2 && ds.Tables[2].Rows.Count > 0)
             {
-                List<SelectedProviderViewModel> _Provider = new List<SelectedProviderViewModel>();
                 _dashboard.SelectedProviderVM = Common.ConvertToList<SelectedProviderViewModel>(ds.Tables[2]);
             }
 
             if (ds != null && ds.Tables.Count > 3 && ds.Tables[3].Rows.Count > 0)
             {
-                List<SelectedPharmacyViewModel> _Pharmacy = new List<SelectedPharmacyViewModel>();
                 _dashboard.SelectedPharmacyVM = Common.ConvertToList<SelectedPharmacyViewModel>(ds.Tables[3]);
             }
 
@@ -175,6 +171,72 @@ namespace DrugCompare.Controllers
 
             return _plansList;
         }
+
+        #region Add Prescription
+        private DrugVM GetDrugs()
+        {
+            DataSet ds = new DataSet();
+
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+                    var User = Session["User"] as Login;
+                    cmd.CommandText = "[dbo].[Sp_GetDrugs]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", User.UserID);
+
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+
+                    con.Close();
+                }
+            }
+
+            //var temp = DataTableToList(ds);
+
+            return DataTableToList(ds);
+        }
+
+        private DrugVM DataTableToList(DataSet ds)
+        {
+            DrugVM drugVm = new DrugVM();
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                drugVm.DrugInfo = Common.ConvertToList<DrugInfo>(ds.Tables[0]);
+            }
+
+            if(ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+            {
+                ds.Tables[1].Columns["DrugID "].ColumnName = "DrugID";
+                drugVm.DrugDosageInfo = Common.ConvertToList<DrugDosageInfo>(ds.Tables[1]);
+            }
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
+            {
+                drugVm.DrugFrequencyInfo = Common.ConvertToList<DrugFrequencyInfo>(ds.Tables[2]);
+            }
+
+            return drugVm;
+        }
+
+        public ActionResult AddNewPrescription()
+        {
+            //ViewBag.HiddenDrugID = 0;
+            var DrugVM = GetDrugs();
+            return View(DrugVM);
+        } 
+
+        [HttpPost]
+        public ActionResult HiddenDrugValue(int? s)
+        {
+            var DrugVM = GetDrugs();
+            DrugVM.DrugDosageInfo = DrugVM.DrugDosageInfo.Where(x => x.DrugId == s).ToList();
+            return PartialView("DosagePopUp", DrugVM);
+        }
+
+        #endregion
     }
 }
 
