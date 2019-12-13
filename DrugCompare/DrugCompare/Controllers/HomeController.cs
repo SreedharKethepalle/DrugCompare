@@ -91,7 +91,7 @@ namespace DrugCompare.Controllers
         }
 
         [HttpPost]
-        public ActionResult PlanList(int SelectedPlanId )
+        public ActionResult PlanList(int SelectedPlanId)
         {
             var _login = (Login)Session["User"];
             var _status = UpdatePlansForUser(_login.UserID, SelectedPlanId);
@@ -217,7 +217,7 @@ namespace DrugCompare.Controllers
             return _providersList;
         }
 
-        private int UpdatePlansForUser(int userId, int planId) 
+        private int UpdatePlansForUser(int userId, int planId)
         {
             int ret = 0;
             using (SqlConnection con = new SqlConnection(conn))
@@ -298,7 +298,7 @@ namespace DrugCompare.Controllers
                 drugVm.DrugInfo = Common.ConvertToList<DrugInfo>(ds.Tables[0]);
             }
 
-            if(ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
             {
                 ds.Tables[1].Columns["DrugID "].ColumnName = "DrugID";
                 drugVm.DrugDosageInfo = Common.ConvertToList<DrugDosageInfo>(ds.Tables[1]);
@@ -317,18 +317,16 @@ namespace DrugCompare.Controllers
             //ViewBag.HiddenDrugID = 0;
             var DrugVM = GetDrugs();
             return View(DrugVM);
-        } 
+        }
 
         [HttpPost]
-        public ActionResult HiddenDrugValue(int? s)
+        public ActionResult PopupData(int? drugValue)
         {
             var DrugVM = GetDrugs();
-            DrugVM.DrugDosageInfo = DrugVM.DrugDosageInfo.Where(x => x.DrugId == s).ToList();
+            DrugVM.DrugDosageInfo = DrugVM.DrugDosageInfo.Where(x => x.DrugId == drugValue).ToList();
             return PartialView("DosagePopUp", DrugVM);
         }
 
         #endregion
     }
 }
-
-

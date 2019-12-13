@@ -105,26 +105,6 @@
         var jqxhr = $.post("PlanList", { 'SelectedPlanId': SelectedPlanId });
         window.location.reload();
 
-        //$.ajax({
-        //    type: "POST",
-        //    url: "PlanList",
-        //    content: "application/json; charset=utf-8",
-        //    dataType: "json",
-        //    cache: false,
-        //    data: { 'SelectedPlanId': SelectedPlanId },
-        //    success: function (d) {
-        //        if (d.success == true) {
-        //            debugger;
-        //            window.location = "index.html";
-        //        }
-        //        else { }
-        //    },
-        //    error: function (xhr, textStatus, errorThrown) {
-        //        debugger;
-        //        console.log(xhr.responseText);
-        //    }
-        //});
-
         $('#selectPlanModalPopUp').modal('hide');
 
 
