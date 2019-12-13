@@ -27,10 +27,91 @@
                         <span>@item.PharmacyPhone</span>
                     </td>
                     <td>
-                        <a id="btn_selectPlan" class="btn btn-default"><i class="fas fa-sync"></i> Change Pharmacy</a>
+                        <a id="btn_selectPharmacy" class="btn btn-default"><i class="fas fa-sync"></i> Change Pharmacy</a>
                     </td>
                 </tr>
             }
         </table>
     </div>
+
+    <article>
+        <div class="modal fade" id="selectPharmacyModalPopUp" role="dialog">
+            <div class="modal-dialog err-pop" style="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Pharmacy Details</span>
+                        <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" style="text-align:center;">
+                        <div>
+                            <table class="table-bordered table-striped" border="1">
+                                <tr>
+                                    <td>Select</td>
+                                    <td>Pharmacy Name</td>
+                                    <td>Pharmacy Address</td>
+                                    <td>Pharmacy Phone</td>
+
+                                </tr>
+
+                                @foreach (var item in Model.PlanListsVM)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input id="Pharmacyid" name="PharmacyId" type="radio" Pharmacyid="@item.PlanId" />
+                                        </td>
+                                        <td>
+                                            @item.PlanName
+                                        </td>
+                                        <td>
+                                            @item.PlanName
+                                        </td>
+                                        <td>
+                                            @item.PlanName
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <input id="btn_PharmacySubmit" type="button" value="Select Pharmacy" class="btn btn-default" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
 </article>
+
+
+<script>
+    var SelectedPharmacy = 0;
+
+    $("#btn_selectPharmacy").click(function () {
+        $('#selectPharmacyModalPopUp').modal('show');
+    });
+
+    $("input[name=PharmacyId]").click(function () {
+
+        SelectedPharmacy = $(this).attr("Pharmacyid");
+        $('#btn_PharmacySubmit').val("Save Selected Pharmacy");
+        $('#btn_PharmacySubmit').addClass("text-success");
+        console.log(SelectedPharmacy);
+    });
+
+    $('#btn_PharmacySubmit').click(function () {
+        debugger;
+        var SelectedPharmacyId = parseInt(SelectedPharmacy);
+
+        var jqxhr = $.post("PharmacyList", { 'SelectedPharmacyId': SelectedPharmacyId });
+        window.location.reload();
+
+      //  $('#selectPharmacyModalPopUp').modal('hide');
+
+
+    });
+
+
+</script>
