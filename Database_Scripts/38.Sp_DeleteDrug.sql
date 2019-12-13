@@ -14,9 +14,9 @@ CREATE PROCEDURE [dbo].[Sp_DeleteDrug]
 )
 AS 
 BEGIN
-IF(1 < (SELECT COUNT(*) FROM PatientDrugMapping WHERE UserId = 1))
+IF(1 < (SELECT COUNT(*) FROM PatientDrugMapping WHERE UserId = @UserId))
 BEGIN
-	DELETE PatientDrugMapping WHERE DrugID =  @DrugID AND UserId = @UserId
+	DELETE PatientDrugMapping WHERE DrugID = @DrugID AND UserId = @UserId
 END
 
 END
