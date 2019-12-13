@@ -264,6 +264,8 @@ namespace DrugCompare.Controllers
         }
 
         #region Add Prescription
+
+        #region AddPrescription Db Calls
         private DrugVM GetDrugs()
         {
             DataSet ds = new DataSet();
@@ -312,6 +314,31 @@ namespace DrugCompare.Controllers
             return drugVm;
         }
 
+        private void saveDrug(int doasgeInfoVal, int frequencyIdVal, int quantityVal, int userID)
+        {
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_AddingNewDrug]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserId", userID);
+                    cmd.Parameters.AddWithValue("DosageID", doasgeInfoVal);
+                    cmd.Parameters.AddWithValue("Quantity", quantityVal);
+                    cmd.Parameters.AddWithValue("FrequencyID", frequencyIdVal);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+        }
+        #endregion
+
         public ActionResult AddNewPrescription()
         {
             //ViewBag.HiddenDrugID = 0;
@@ -327,6 +354,13 @@ namespace DrugCompare.Controllers
             return PartialView("DosagePopUp", DrugVM);
         }
 
+        [HttpPost]
+        public ActionResult SaveDrugInfo(int DoasgeInfoVal, int FrequencyIdVal, int QuantityVal)
+        {
+            var User = Session["User"] as Login;
+            saveDrug(DoasgeInfoVal, FrequencyIdVal, QuantityVal, User.UserID);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

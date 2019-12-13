@@ -118,7 +118,20 @@
         else {
             $('#errorMessages').html("");
             console.log(DoasgeInfoVal, FrequencyIdVal, QuantityVal);
+            postDrugInfo(DoasgeInfoVal, FrequencyIdVal, QuantityVal);
+           
         }
     });
+
+    function postDrugInfo(DoasgeInfoVal, FrequencyIdVal, QuantityVal) {
+        $.post("SaveDrugInfo", { 'DoasgeInfoVal': DoasgeInfoVal, 'FrequencyIdVal': FrequencyIdVal, 'QuantityVal': QuantityVal }, function (data) {
+            if (data == true) {
+                window.location.href = '@Url.Action("Dashboard", "Home")';
+            }
+            else
+                alert('Notsaved');
+        });
+    }
+
 
 </script>
