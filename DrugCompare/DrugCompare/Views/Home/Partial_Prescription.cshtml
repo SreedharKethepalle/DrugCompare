@@ -70,7 +70,7 @@
                                 <td>Plan Names</td>
                             </tr>
 
-                            @foreach (var item in Model.PlanLists)
+                            @foreach (var item in Model.PlanListsVM)
                             {
                                 <tr>
                                     <td>
@@ -100,7 +100,6 @@
 
 <script type="text/javascript">
     var h = $('#DrugName').attr('DrugId');
-    debugger;
     $("#DrugName").click(function () {
         $('#selectPlanModalPopUp').modal('show');
     });

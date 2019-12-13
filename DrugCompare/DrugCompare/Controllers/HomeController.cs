@@ -38,7 +38,8 @@ namespace DrugCompare.Controllers
                 if (ModelState.IsValid)
                 {
                     Session["Plans"] = getPlansList(2019);
-                    return RedirectToAction("Dashboard", new { userId = login.UserID });
+                    Session["Providers"] = getProvidersList();
+                    return RedirectToAction("Dashboard");
                 }
                 else
                     return View();
@@ -71,22 +72,38 @@ namespace DrugCompare.Controllers
         }
         #endregion
 
-        public ActionResult Dashboard(int userId)
+        public ActionResult Dashboard()
         {
+            var _login = (Login)Session["User"];
 
             List<PlansList> _planNames = new List<PlansList>();
             _planNames = (List<PlansList>)Session["Plans"];
 
-            var _dashboard = getDashBoardDetails(userId);
-            _dashboard.PlanLists = _planNames;
+            List<SelectedProviderViewModel> _providerNames = new List<SelectedProviderViewModel>();
+            _providerNames = (List<SelectedProviderViewModel>)Session["Providers"];
+
+
+            var _dashboard = getDashBoardDetails(_login.UserID);
+            _dashboard.PlanListsVM = _planNames;
+            _dashboard.ProviderListsVM = _providerNames;
 
             return View(_dashboard);
         }
 
-        public ActionResult PlanList()
+        [HttpPost]
+        public ActionResult PlanList(int SelectedPlanId )
         {
-            var UserData = Session["User"] as Login;
-            return RedirectToAction("Dashboard", new { userId = UserData.UserID });
+            var _login = (Login)Session["User"];
+            var _status = UpdatePlansForUser(_login.UserID, SelectedPlanId);
+            return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost]
+        public ActionResult ProvidersList(int SelectedProviderId)
+        {
+            var _login = (Login)Session["User"];
+            var _status = UpdateProvidersForUser(_login.UserID, SelectedProviderId);
+            return RedirectToAction("Dashboard");
         }
 
         private DashboardViewModel getDashBoardDetails(int userId)
@@ -172,6 +189,80 @@ namespace DrugCompare.Controllers
             return _plansList;
         }
 
+
+        private List<SelectedProviderViewModel> getProvidersList()
+        {
+            List<SelectedProviderViewModel> _providersList = new List<SelectedProviderViewModel>();
+            DataSet ds = new DataSet();
+
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_GetProvidersList]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.AddWithValue("@PlanYear", planYear);
+
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+
+                    con.Close();
+                }
+            }
+
+            _providersList = Common.ConvertToList<SelectedProviderViewModel>(ds.Tables[0]);
+
+            return _providersList;
+        }
+
+        private int UpdatePlansForUser(int userId, int planId) 
+        {
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_UpdatePlansForUser]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserId", userId);
+                    cmd.Parameters.AddWithValue("PlanId", planId);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+            return ret;
+        }
+
+        private int UpdateProvidersForUser(int userId, int providerId)
+        {
+            int ret = 0;
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+
+                    cmd.CommandText = "[dbo].[Sp_UpdateProviderForUser]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("UserId", userId);
+                    cmd.Parameters.AddWithValue("ProviderId", providerId);
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    ret = (int)returnParameter.Value;
+                }
+            }
+            return ret;
+        }
+
         #region Add Prescription
         private DrugVM GetDrugs()
         {
@@ -241,10 +332,3 @@ namespace DrugCompare.Controllers
 }
 
 
-//DashboardViewModel _dashboard = new DashboardViewModel
-//{
-//    UserPlansVM = new UserPlanViewModel { PlanId = 102, PlanName = "halla gilla plan" },
-//    PrescriptionVM = new PrescriptionViewModel { DrugId = 101, DrugName = "Dolo", DoseId = 101, DoseageName = "Dolo - 650" },
-//    ProviderVM = new ProviderViewModel { ProviderId = 101, ProviderName = "Shree Krishna Clinic" },
-//    PharmacyVM = new PharmacyViewModel { PharmacyId = 101, PharmacyName = "Apollo Pharmacy" }
-//};

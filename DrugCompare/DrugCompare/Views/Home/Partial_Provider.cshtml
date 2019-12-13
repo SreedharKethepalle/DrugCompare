@@ -32,12 +32,98 @@
                         <span>@item.ProviderExperience</span>
                     </td>
                     <td>
-                        <a id="btn_selectPlan" class="btn btn-default"><i class="fas fa-sync"></i> Change Provider</a>
+                        <a id="btn_selectProvider" class="btn btn-default"><i class="fas fa-sync"></i> Change Provider</a>
                     </td>
                 </tr>
             }
         </table>
     </div>
+
+
+    <div class="modal fade" id="selectProviderModalPopUp" role="dialog">
+        <div class="modal-dialog err-pop" style="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Provider Details</span>
+                    <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" style="text-align:center;">
+                    <div>
+                        <table class="table-bordered table-striped" border="1">
+                            <tr>
+                                <td>Select</td>
+                                <td>Provider Name</td>
+                                <td>Provider Address</td>
+                                <td>Provider Phone</td>
+                                <td>Provider Experience</td>
+                            </tr>
+
+                            @foreach (var item in Model.ProviderListsVM)
+                            {
+                                <tr>
+                                    <td>
+                                        <input id="Providerid" name="ProviderId" type="radio" providerid="@item.ProviderId" />
+                                    </td>
+                                    <td>
+                                        @item.ProviderName
+                                    </td>
+                                    <td>
+                                        @item.ProviderAddress
+                                    </td>
+                                    <td>
+                                        @item.ProviderPhone
+                                    </td>
+                                    <td>
+                                        @item.ProviderExperience
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="5">
+                                    <input id="btn_ProviderSubmit" type="button" value="Select Provider" class="btn btn-default" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </article>
+
+
+
+<script>
+    var SelectedProvider = 0;
+
+    $("#btn_selectProvider").click(function () {
+        $('#selectProviderModalPopUp').modal('show');
+    });
+
+    $("input[name=ProviderId]").click(function () {
+
+        SelectedProvider = $(this).attr("providerid");
+        $('#btn_ProviderSubmit').val("Save Selected Plan");
+        $('#btn_ProviderSubmit').addClass("text-success");
+        console.log(SelectedPlan);
+    });
+
+    $('#btn_ProviderSubmit').click(function () {
+        debugger;
+        var SelectedProviderId = parseInt(SelectedProvider);
+
+        var jqxhr = $.post("ProvidersList", { 'SelectedProviderId': SelectedProviderId });
+        window.location.reload();
+
+        $('#selectProviderModalPopUp').modal('hide');
+
+
+    });
+
+
+</script>
 
 

@@ -3,6 +3,7 @@
 <h3>Plan Details</h3>
 
 
+
 <article>
     <div class="form-group">
         <table border="1">
@@ -44,32 +45,26 @@
                     </div>
                     <div class="modal-body" style="text-align:center;">
                         <div>
-                            <table border="1">
+                            <table class="table-bordered table-striped" border="1">
                                 <tr>
                                     <td>Select</td>
                                     <td>Plan Names</td>
                                 </tr>
 
-                                @foreach (var item in Model.PlanLists)
+                                @foreach (var item in Model.PlanListsVM)
                                 {
                                     <tr>
                                         <td>
                                             <input id="Planid" name="PlanId" type="radio" planid="@item.PlanId" />
                                         </td>
                                         <td>
-                                            @Html.Hidden("PlanId", @item.PlanId)
                                             @item.PlanName
                                         </td>
                                     </tr>
                                 }
                                 <tr>
                                     <td colspan="2">
-                                        @*<%= Html.Button("Action", "Controller") %>
-                                            <input type="button"
-                                                   value="Go Somewhere Else"
-                                                   onclick="location.href='<%: Url.Action(" Action", "Controller" ) %>'" />*@
-
-                                        <a id="PlanSelectionButton" href="@Url.Action("PlanList", "Home")" class="btn btn-default">Select Plan</a>
+                                       <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
                                     </td>
                                 </tr>
                             </table>
@@ -82,17 +77,60 @@
 
 </article>
 
-@*<script src="https://code.jquery.com/jquery-1.10.0.min.js"
-        integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE="
-        crossorigin="anonymous"></script>*@
+
+
+
 
 <script>
-   
+    var SelectedPlan = 0;
+
+
+
     $("#btn_selectPlan").click(function () {
         $('#selectPlanModalPopUp').modal('show');
     });
-
     
+    $("input[name=PlanId]").click(function () {
+
+        SelectedPlan = $(this).attr("planid");
+        $('#btn_PlanSubmit').val("Save Selected Plan");
+        $('#btn_PlanSubmit').addClass("text-success");
+        console.log(SelectedPlan);
+    });
+
+    $('#btn_PlanSubmit').click(function () {
+        debugger;
+        var SelectedPlanId = parseInt(SelectedPlan);
+
+        var jqxhr = $.post("PlanList", { 'SelectedPlanId': SelectedPlanId });
+        window.location.reload();
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "PlanList",
+        //    content: "application/json; charset=utf-8",
+        //    dataType: "json",
+        //    cache: false,
+        //    data: { 'SelectedPlanId': SelectedPlanId },
+        //    success: function (d) {
+        //        if (d.success == true) {
+        //            debugger;
+        //            window.location = "index.html";
+        //        }
+        //        else { }
+        //    },
+        //    error: function (xhr, textStatus, errorThrown) {
+        //        debugger;
+        //        console.log(xhr.responseText);
+        //    }
+        //});
+
+        $('#selectPlanModalPopUp').modal('hide');
+
+
+    });
+
+
 </script>
 
 

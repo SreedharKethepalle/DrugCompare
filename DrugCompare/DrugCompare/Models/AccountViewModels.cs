@@ -116,7 +116,9 @@ namespace DrugCompare.Models
         public List<SelectedPrescriptionViewModel> SelectedPrescriptionVM { get; set; }
         public List<SelectedProviderViewModel> SelectedProviderVM { get; set; }
         public List<SelectedPharmacyViewModel> SelectedPharmacyVM { get; set; }
-        public List<PlansList> PlanLists { get; set; }
+        public List<PlansList> PlanListsVM { get; set; }
+        public List<SelectedProviderViewModel> ProviderListsVM { get; set; }
+
     }
 
 
