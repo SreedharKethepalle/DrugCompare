@@ -14,7 +14,8 @@
                 @*<input type="button" class="btn btn-primary" id="btn_AddNewDrug" /><i class="fa fa-plus-square"></i>Add New Prescrition*@
                 <td align="center"><a href="@Url.Action("AddNewPrescription", "Home")" class="btn btn-default"><i class="fa fa-plus-square"></i> Add New Prescrition</a>
             </tr>
-            @{ if (Model.SelectedPrescriptionVM != null && Model.SelectedPrescriptionVM.Count > 0)
+            @{
+                if (Model.SelectedPrescriptionVM != null && Model.SelectedPrescriptionVM.Count > 0)
                 {
                     foreach (var item in Model.SelectedPrescriptionVM)
                     {
@@ -22,7 +23,12 @@
                             <td>
                                 @Html.Hidden("DrugId", @item.DrugId)
                                 <span>@item.DrugName</span><br />
-                                <a href='@Url.Action("DeleteDrug", "Home", new { DrugId = item.DrugId })'>Delete</a>
+                                @{
+                                    if (Model.SelectedPrescriptionVM.Count() > 1)
+                                    {
+                                        <a href='@Url.Action("DeleteDrug", "Home", new { DrugId = item.DrugId })'>Delete</a>
+                                    }
+                                }
                             </td>
                             <td>
                                 @Html.Hidden("DoseId", @item.DoseId)
@@ -42,10 +48,11 @@
                             </td>
 
                         </tr>
-                    }
-                }
+                                        }
+                                    }
             }
         </table>
+
     </div>
 </article>
 
