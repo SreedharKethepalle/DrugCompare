@@ -86,7 +86,7 @@ namespace DrugCompare.Controllers
             List<PharmacyViewModel> _pharmacyNames = new List<PharmacyViewModel>();
             _pharmacyNames = (List<PharmacyViewModel>)Session["Pharmacy"];
 
-            
+
             var _dashboard = getDashBoardDetails(_login.UserID);
             _dashboard.PlanListsVM = _planNames;
             _dashboard.ProviderListsVM = _providerNames;
@@ -322,7 +322,7 @@ namespace DrugCompare.Controllers
         #region Add Prescription
 
         #region AddPrescription Db Calls
-        private DrugVM GetDrugs()
+        private DrugVM GetDrugs(int? drugID)
         {
             DataSet ds = new DataSet();
 
@@ -334,6 +334,7 @@ namespace DrugCompare.Controllers
                     cmd.CommandText = "[dbo].[Sp_GetDrugs]";
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", User.UserID);
+                    cmd.Parameters.AddWithValue("@DrugID", drugID);
 
                     con.Open();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -353,11 +354,12 @@ namespace DrugCompare.Controllers
             DrugVM drugVm = new DrugVM();
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                drugVm.DrugInfo = Common.ConvertToList<DrugInfo>(ds.Tables[0]);
+                drugVm.DrugInfoAlternatvies = Common.ConvertToList<DrugInfo>(ds.Tables[0]);
             }
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
             {
+                //ds.Tables[1].Columns["DrugID "].ColumnName = "DrugID";
                 drugVm.DrugDosageInfo = Common.ConvertToList<DrugDosageInfo>(ds.Tables[1]);
             }
 
@@ -365,11 +367,15 @@ namespace DrugCompare.Controllers
             {
                 drugVm.DrugFrequencyInfo = Common.ConvertToList<DrugFrequencyInfo>(ds.Tables[2]);
             }
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
+            {
+                drugVm.DrugInfoExists = Common.ConvertToList<DrugInfo>(ds.Tables[3]);
+            }
 
             return drugVm;
         }
 
-        private void saveDrug(int doasgeInfoVal, int frequencyIdVal, int quantityVal, int userID)
+        private void saveDrug(int doasgeInfoVal, int frequencyIdVal, int quantityVal, int userID,int? HiddenDrugID)
         {
             int ret = 0;
             using (SqlConnection con = new SqlConnection(conn))
@@ -383,6 +389,8 @@ namespace DrugCompare.Controllers
                     cmd.Parameters.AddWithValue("DosageID", doasgeInfoVal);
                     cmd.Parameters.AddWithValue("Quantity", quantityVal);
                     cmd.Parameters.AddWithValue("FrequencyID", frequencyIdVal);
+                    if (HiddenDrugID.HasValue)
+                        cmd.Parameters.AddWithValue("HiddenDrugID", HiddenDrugID);
 
                     var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                     returnParameter.Direction = ParameterDirection.ReturnValue;
@@ -393,7 +401,7 @@ namespace DrugCompare.Controllers
             }
         }
 
-        private void Delete(int? drugID,int userID)
+        private void Delete(int? drugID, int userID)
         {
             int ret = 0;
             using (SqlConnection con = new SqlConnection(conn))
@@ -419,24 +427,29 @@ namespace DrugCompare.Controllers
 
         public ActionResult AddNewPrescription()
         {
-            //ViewBag.HiddenDrugID = 0;
-            var DrugVM = GetDrugs();
+            Session["hiddenDrugID"] = 0;
+            var DrugVM = GetDrugs(null);
             return View(DrugVM);
         }
 
         [HttpPost]
         public ActionResult PopupData(int? drugValue)
         {
-            var DrugVM = GetDrugs();
+
+            var DrugVM = GetDrugs(null);
             DrugVM.DrugDosageInfo = DrugVM.DrugDosageInfo.Where(x => x.DrugId == drugValue).ToList();
+            foreach (var c in DrugVM.DrugDosageInfo)
+            {
+                c.HiddenDrugID = (int)Session["hiddenDrugID"];
+            }
             return PartialView("DosagePopUp", DrugVM);
         }
 
         [HttpPost]
-        public ActionResult SaveDrugInfo(int DoasgeInfoVal, int FrequencyIdVal, int QuantityVal)
+        public ActionResult SaveDrugInfo(int DoasgeInfoVal, int FrequencyIdVal, int QuantityVal,int? HiddenDrugID)
         {
             var User = Session["User"] as Login;
-            saveDrug(DoasgeInfoVal, FrequencyIdVal, QuantityVal, User.UserID);
+            saveDrug(DoasgeInfoVal, FrequencyIdVal, QuantityVal, User.UserID, HiddenDrugID);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -446,6 +459,23 @@ namespace DrugCompare.Controllers
             Delete(DrugId, User.UserID);
 
             return RedirectToAction("DashBoard");
+        }
+
+        #endregion
+
+        #region Refill or Alternative drugs
+
+        public ActionResult RefilorAlternative(int DrugID)
+        {
+            var DrugVM = GetDrugs(DrugID);
+            Session["hiddenDrugID"] = DrugID;
+
+            if (DrugVM.DrugInfoAlternatvies != null)
+                DrugVM.DrugInfoAlternatvies = DrugVM.DrugInfoAlternatvies.Where(x => x.DrugID != DrugID).ToList();
+            else
+                DrugVM.DrugInfoAlternatvies = new List<DrugInfo>();
+           
+            return View(DrugVM);
         }
 
         #endregion

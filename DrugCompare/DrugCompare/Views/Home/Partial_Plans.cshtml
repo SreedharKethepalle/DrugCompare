@@ -43,7 +43,7 @@
             <div class="modal-dialog err-pop" style="">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span>Plan Details</span>
+                        <h2>Plan Details</h2>
                         <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div id="errorMsg1" hidden="hidden">
@@ -51,7 +51,7 @@
                     </div>
                     <div class="modal-body" style="text-align:center;">
                         <div>
-                            <table class="table-bordered table-striped" border="1">
+                            <table class="table-bordered table-striped" style="width:100%" border="1">
                                 <tr>
                                     <td>Select</td>
                                     <td>Plan Names</td>
@@ -68,12 +68,15 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr>
+                                @*<tr>
                                     <td colspan="2">
                                         <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
                                     </td>
-                                </tr>
+                                </tr>*@
                             </table>
+                            <div style="padding-top: 15px;">
+                                <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,7 +105,7 @@
         SelectedPlan = $(this).attr("planid");
         $('#btn_PlanSubmit').val("Save Selected Plan").css({ "background-color": "lightgreen" });
         //$('#btn_PlanSubmit').addClass("text-success");
-        console.log(SelectedPlan);
+        //console.log(SelectedPlan);
     });
 
     $('#btn_PlanSubmit').click(function () {

@@ -4,13 +4,13 @@
     <div class="modal-dialog err-pop" style="">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Plan Details</span>
+                <h2>Plan Details</h2>
                 <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div id="errorMessages">
             </div>
             <div class="modal-body" style="text-align:center;">
-                @Html.Hidden("HiddenDrugID", 0)
+
                 <div>
                     <table>
                         <tr>
@@ -22,6 +22,7 @@
                                     </tr>
                                     @foreach (var item in Model.DrugDosageInfo)
                                     {
+                                        @Html.Hidden("HiddenDrugID", item.HiddenDrugID);
                                         <tr>
                                             <td>
                                                 <input id="DrugDoseId" name="DrugDoseId" type="radio" value="@item.DrugDoseId" DrugDoseId="@item.DrugDoseId" />
@@ -98,7 +99,7 @@
         if (DoasgeInfoVal != 0 && FrequencyIdVal != 0 && (QuantityVal != null || QuantityVal != undefined || QuantityVal != ""))
             $('#btn_Dosageinfo').text("Add Drug to your Prescription List").css({ "background-color": "lightgreen" });
         else
-            $('#btn_Dosageinfo').text("Select your drug data").css({ "background-color": "" ,"colour":"red"});
+            $('#btn_Dosageinfo').text("Select your drug data").css({ "background-color": "", "colour": "red" });
     }
 
     function validate() {
@@ -123,14 +124,15 @@
             $('#errorMessages').html(errors).css('color', 'red');
         else {
             $('#errorMessages').html("");
-            console.log(DoasgeInfoVal, FrequencyIdVal, QuantityVal);
-            postDrugInfo(DoasgeInfoVal, FrequencyIdVal, QuantityVal);
-           
+            //console.log(DoasgeInfoVal, FrequencyIdVal, QuantityVal);
+            var HiddenDrugID = parseInt($('#HiddenDrugID').val());
+            postDrugInfo(DoasgeInfoVal, FrequencyIdVal, QuantityVal, HiddenDrugID);
+
         }
     });
 
-    function postDrugInfo(DoasgeInfoVal, FrequencyIdVal, QuantityVal) {
-        $.post("SaveDrugInfo", { 'DoasgeInfoVal': DoasgeInfoVal, 'FrequencyIdVal': FrequencyIdVal, 'QuantityVal': QuantityVal }, function (data) {
+    function postDrugInfo(DoasgeInfoVal, FrequencyIdVal, QuantityVal, HiddenDrugID) {
+        $.post("SaveDrugInfo", { 'DoasgeInfoVal': DoasgeInfoVal, 'FrequencyIdVal': FrequencyIdVal, 'QuantityVal': QuantityVal, 'HiddenDrugID': HiddenDrugID }, function (data) {
             if (data == true) {
                 window.location.href = '@Url.Action("Dashboard", "Home")';
             }

@@ -205,7 +205,7 @@ namespace DrugCompare.Models
 
         public decimal UnitCost { get; set; }
 
-        public int HiddenDrugID { get; set; }
+        public int? HiddenDrugID { get; set; }
     }
 
     public class DrugFrequencyInfo
@@ -219,7 +219,9 @@ namespace DrugCompare.Models
 
     public class DrugVM
     {
-        public List<DrugInfo> DrugInfo { get; set; }
+        public List<DrugInfo> DrugInfoExists { get; set; }
+
+        public List<DrugInfo> DrugInfoAlternatvies { get; set; }
 
         public List<DrugDosageInfo> DrugDosageInfo { get; set; }
 

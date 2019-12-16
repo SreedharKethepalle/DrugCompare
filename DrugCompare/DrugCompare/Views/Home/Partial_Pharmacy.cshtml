@@ -42,7 +42,7 @@
             <div class="modal-dialog err-pop" style="">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span>Pharmacy Details</span>
+                        <h2>Pharmacy Details</h2>
                         <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div id="errorMsg2" hidden="hidden">
@@ -75,12 +75,15 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr>
+                                @*<tr>
                                     <td colspan="4">
                                         <input id="btn_PharmacySubmit" type="button" value="Select Pharmacy" class="btn btn-default" />
                                     </td>
-                                </tr>
+                                </tr>*@
                             </table>
+                            <div style="padding-top:12px">
+                                <input id="btn_PharmacySubmit" type="button" value="Select Pharmacy" class="btn btn-default" />
+                            </div>
                         </div>
                     </div>
                 </div>

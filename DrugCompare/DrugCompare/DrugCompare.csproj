@@ -282,6 +282,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\DosagePopUp.cshtml" />
     <Content Include="Views\Home\AddNewPrescription.cshtml" />
+    <Content Include="Views\Home\RefilorAlternative.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

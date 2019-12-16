@@ -1,0 +1,115 @@
+﻿@model DrugCompare.Models.DrugVM
+
+@{
+    ViewBag.Title = "RefilorAlternative";
+}
+<style>
+    /*#btn_HomePage:hover{
+        background-color:orange;
+    }*/
+</style>
+
+<h2 id="Header">Refill or Alternatives</h2>
+
+<div style="text-align:right">
+    <span><a href="@Url.Action("DashBoard")" id="btn_HomePage" class="btn btn-default"> Home page </a></span>
+</div>
+<table id="DrugTable" class="table">
+    <tr>
+        @*<th>
+                Select the drug
+            </th>*@
+        <th>
+            Drug Name
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+
+    @foreach (var item in Model.DrugInfoExists)
+    {
+        <tr>
+            @*<td >
+                    <input type="checkbox" DrugID="@item.DrugID" id="DrugID" />
+                </td>*@
+            <td>
+                @Html.HiddenFor(modelItem => item.DrugID)
+                @Html.HiddenFor(modelItem => item.PrimaryDrugId)
+                @Html.DisplayFor(modelItem => item.DrugName)
+            </td>
+            <td>
+                @*<span class="btn btn-default" id="Status_@item.DrugID">Select Drug</span>*@
+                <span class="btn btn-default" id="SelectedDrug" DrugID="@item.DrugID">Select Drug</span>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<h2>@Model.DrugInfoAlternatvies.Count() Alternative Drugs</h2>
+<table id="DrugTable" class="table">
+    <tr>
+        @*<th>
+                Select the drug
+            </th>*@
+        <th>
+            Drug Name
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+
+    @{
+        if (Model.DrugInfoAlternatvies.Count() > 0)
+        {
+            foreach (var item in Model.DrugInfoAlternatvies)
+            {
+                <tr>
+                    @*<td >
+                            <input type="checkbox" DrugID="@item.DrugID" id="DrugID" />
+                        </td>*@
+                    <td>
+                        @Html.HiddenFor(modelItem => item.DrugID)
+                        @Html.HiddenFor(modelItem => item.PrimaryDrugId)
+                        @Html.DisplayFor(modelItem => item.DrugName)
+                    </td>
+                    <td>
+                        @*<span class="btn btn-default" id="Status_@item.DrugID">Select Drug</span>*@
+                        <span class="btn btn-default" id="SelectedDrug" DrugID="@item.DrugID">Select Drug</span>
+                    </td>
+                </tr>
+            }
+        }
+
+    }
+</table>
+
+<div id="popup">
+
+</div>
+
+<script>
+
+    $('span#SelectedDrug').click(function () {
+        $.ajax({
+            type: 'POST',
+            url: 'PopupData',
+            data: '{DrugValue:' + parseInt($(this).attr("DrugID")) + '}',
+            success: function (data) {
+                $('#popup').html(data);
+                $('#selectPlanModalPopUp').modal('show');
+            },
+            error: function (ex, dmxm, x) {
+                console.log(ex.responseText);
+            },
+            contentType: "application/json",
+            //dataType: 'json' -- if not commented it returns me a parse error
+        });
+        $('#HiddenDrugID').val(parseInt($(this).attr("DrugID"))); // Not working need to see
+
+    });
+
+</script>
+
