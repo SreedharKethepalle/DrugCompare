@@ -1,16 +1,19 @@
 ﻿@model DrugCompare.Models.DashboardViewModel
+<style>
 
-<h3>Pharmacy Details</h3>
-
+</style>
+<div class="section-header">
+    Pharmacy Details
+</div>
 
 <article>
     <div>
-        <table border="1">
-            <tr>
-                <td align="center">Pharmacy Name</td>
-                <td align="center">Pharmacy Address</td>
-                <td align="center">Pharmacy Phone</td>
-                <td align="center"></td>
+        <table class="table-striped" border="1">
+            <tr class="bold-tr">
+                <td>Pharmacy Name</td>
+                <td>Pharmacy Address</td>
+                <td>Pharmacy Phone</td>
+                <td></td>
             </tr>
             @{ if (Model.SelectedPharmacyVM != null && Model.SelectedPharmacyVM.Count > 0)
                 {
@@ -41,9 +44,9 @@
         <div class="modal fade" id="selectPharmacyModalPopUp" role="dialog">
             <div class="modal-dialog err-pop" style="">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Pharmacy Details</h2>
-                        <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="section-header">
+                        Pharmacy Details
+                        <button id="DivClose" type="button" class="close popup-Close" data-dismiss="modal">&times;</button>
                     </div>
                     <div id="errorMsg2" hidden="hidden">
                         <span style="color:red;"  >Please select Pharmacy</span>
@@ -51,7 +54,7 @@
                     <div class="modal-body" style="text-align:center;">
                         <div>
                             <table class="table-bordered table-striped" border="1">
-                                <tr>
+                                <tr class="bold-tr">
                                     <td>Select</td>
                                     <td>Pharmacy Name</td>
                                     <td>Pharmacy Address</td>
@@ -82,7 +85,7 @@
                                 </tr>*@
                             </table>
                             <div style="padding-top:12px">
-                                <input id="btn_PharmacySubmit" type="button" value="Select Pharmacy" class="btn btn-default" />
+                                <input id="btn_PharmacySubmit" type="button" value="Select Pharmacy" class="btn" />
                             </div>
                         </div>
                     </div>
@@ -105,7 +108,7 @@
     $("input[name=PharmacyId]").click(function () {
 
         SelectedPharmacy = $(this).attr("Pharmacyid");
-        $('#btn_PharmacySubmit').val("Save Selected Pharmacy").css({ "background-color": "lightgreen" });
+        $('#btn_PharmacySubmit').val("Save Selected Pharmacy").addClass("btn-success");
         //$('#btn_PharmacySubmit').addClass("text-success");
         console.log(SelectedPharmacy);
     });

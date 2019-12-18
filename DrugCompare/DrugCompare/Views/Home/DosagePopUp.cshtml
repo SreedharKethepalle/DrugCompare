@@ -1,11 +1,11 @@
 ﻿@model DrugCompare.Models.DrugVM
 
 <div class="modal fade" id="selectPlanModalPopUp" role="dialog">
-    <div class="modal-dialog err-pop" style="">
+    <div class="modal-dialog err-pop" style="width: 650px;">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>Plan Details</h2>
-                <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="section-header">
+                Plan Details
+                <button id="DivClose" type="button" class="close popup-Close" data-dismiss="modal">&times;</button>
             </div>
             <div id="errorMessages">
             </div>
@@ -16,7 +16,7 @@
                         <tr>
                             <td>
                                 <table>
-                                    <tr>
+                                    <tr class="bold-tr">
                                         <td>Select</td>
                                         <td>Dosage List</td>
                                     </tr>
@@ -38,7 +38,9 @@
                             </td>
                             <td>
                                 <table>
-                                    <tr>Quantity</tr>
+                                    <tr class="bold-tr">
+                                        <td>Quantity</td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <input type="number" class="btn" id="Quantity" style="border:groove!important" value="" />
@@ -48,7 +50,7 @@
                             </td>
                             <td>
                                 <table>
-                                    <tr>
+                                    <tr class="bold-tr">
                                         <td>Select</td>
                                         <td>Frequency Names</td>
                                     </tr>
@@ -72,7 +74,7 @@
 
                 </div>
                 <div>
-                    <button id="btn_Dosageinfo" class="btn btn-default" style="text-align:right">  Select your drug data</button>
+                    <button id="btn_Dosageinfo" class="btn" style="text-align:right">  Select your drug data</button>
                 </div>
             </div>
         </div>
@@ -96,10 +98,10 @@
     });
     document.getElementById('selectPlanModalPopUp').onclick = function () {
         var QuantityVal = $("#Quantity").val();
-        if (DoasgeInfoVal != 0 && FrequencyIdVal != 0 && (QuantityVal != null || QuantityVal != undefined || QuantityVal != ""))
-            $('#btn_Dosageinfo').text("Add Drug to your Prescription List").css({ "background-color": "lightgreen" });
+        if (DoasgeInfoVal != 0 && FrequencyIdVal != 0 && (QuantityVal != null && QuantityVal != undefined && QuantityVal != ""))
+            $('#btn_Dosageinfo').text("Add Drug to your Prescription List").addClass("btn-success").css('color', '');
         else
-            $('#btn_Dosageinfo').text("Select your drug data").css({ "background-color": "", "colour": "red" });
+            $('#btn_Dosageinfo').text("Select your drug data").css({ "background-color": "", "color": "red" });
     }
 
     function validate() {

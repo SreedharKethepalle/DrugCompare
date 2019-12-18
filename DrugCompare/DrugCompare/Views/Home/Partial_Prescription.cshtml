@@ -1,18 +1,20 @@
 ﻿@model DrugCompare.Models.DashboardViewModel
 
-<h3>Prescription Details</h3>
+<div class="section-header">
+    Prescription Details
+</div>
 
 <article>
     <div>
-        <table border="1">
-            <tr>
+        <table class="table-striped" border="1">
+            <tr class="bold-tr">
                 <td align="center">Drug Name</td>
                 <td align="center">Doseage Name</td>
                 <td align="center">Drug Quantity</td>
                 <td align="center">Drug Price</td>
                 <td align="center">Frequecncy</td>
                 @*<input type="button" class="btn btn-primary" id="btn_AddNewDrug" /><i class="fa fa-plus-square"></i>Add New Prescrition*@
-                <td align="center"><a href="@Url.Action("AddNewPrescription", "Home")" class="btn btn-default"><i class="fa fa-plus-square"></i> Add New Prescrition</a>
+                <td align="center"><a href="@Url.Action("AddNewPrescription", "Home")" class="btn btn-default" id="btn_AddDrug"><i class="fa fa-plus-square"></i> Add New Prescrition</a>
             </tr>
             @{
                 if (Model.SelectedPrescriptionVM != null && Model.SelectedPrescriptionVM.Count > 0)
@@ -44,7 +46,7 @@
                                 <span>@item.FrequencyName</span>
                             </td>
                             <td>
-                                <a href="@Url.Action("RefilorAlternative", "Home", new { DrugId = item.DrugId })" class="btn btn-default"><i class="fas fa-fill-drip"></i> Refilling \ Alternatives</a>
+                                <a href="@Url.Action("RefilorAlternative", "Home", new { DrugId = item.DrugId })" class="btn btn-default" id="btn_RefilAlternative"><i class="fas fa-fill-drip"></i> Refilling \ Alternatives</a>
                             </td>
 
                         </tr>

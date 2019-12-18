@@ -1,13 +1,23 @@
 ﻿@model DrugCompare.Models.DashboardViewModel
 
-<h3>Plan Details</h3>
+<div class="section-header">
+    Plan Details
+</div>
+<style>
+    table {
+        width: 100%;
+    }
 
+        table, table tr {
+            border: 1px solid #ddd;
+        }
+</style>
 
 
 <article>
-    <div class="form-group">
-        <table border="1">
-            <tr>
+    <div>
+        <table class="table table-striped" border="1">
+            <tr class="bold-tr">
                 <td align="center">Plan Name</td>
                 <td align="center">Plan Type</td>
                 <td align="center">Plan Year</td>
@@ -42,9 +52,9 @@
         <div class="modal fade" id="selectPlanModalPopUp" role="dialog">
             <div class="modal-dialog err-pop" style="">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Plan Details</h2>
-                        <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="section-header">
+                        Plan Details
+                        <button id="DivClose" type="button" class="close popup-Close" data-dismiss="modal">&times;</button>
                     </div>
                     <div id="errorMsg1" hidden="hidden">
                         <span style="color:red;">Please select Plans</span>
@@ -69,13 +79,13 @@
                                     </tr>
                                 }
                                 @*<tr>
-                                    <td colspan="2">
-                                        <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
-                                    </td>
-                                </tr>*@
+                                        <td colspan="2">
+                                            <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
+                                        </td>
+                                    </tr>*@
                             </table>
                             <div style="padding-top: 15px;">
-                                <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn btn-default" />
+                                <input id="btn_PlanSubmit" type="button" value="Select Plan" class="btn" />
                             </div>
                         </div>
                     </div>
@@ -103,7 +113,7 @@
     $("input[name=PlanId]").click(function () {
 
         SelectedPlan = $(this).attr("planid");
-        $('#btn_PlanSubmit').val("Save Selected Plan").css({ "background-color": "lightgreen" });
+        $('#btn_PlanSubmit').val("Save Selected Plan").addClass("btn-success");
         //$('#btn_PlanSubmit').addClass("text-success");
         //console.log(SelectedPlan);
     });
